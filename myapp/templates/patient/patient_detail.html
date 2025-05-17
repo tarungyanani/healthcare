@@ -1,0 +1,360 @@
+<!-- templates/patient_detail.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Details</title>
+    <style>
+        :root {
+            --primary: #4f6df5;
+            --primary-light: #eef1ff;
+            --accent: #05d69e;
+            --text: #2d3748;
+            --text-light: #718096;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.05);
+            --border: #e2e8f0;
+            --danger: #f56565;
+            --info: #4299e1;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 3rem 2rem;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .header-left h1 {
+            font-weight: 600;
+            font-size: 1.8rem;
+            color: var(--text);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .header-left h1:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+        
+        .patient-id {
+            display: inline-block;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 0.3rem 0.6rem;
+            border-radius: 1rem;
+            margin-left: 1rem;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background: #3c5be0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11);
+        }
+        
+        .btn-danger {
+            background: white;
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background: var(--danger);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11);
+        }
+        
+        .btn svg {
+            margin-right: 6px;
+            width: 18px;
+            height: 18px;
+        }
+        
+        .patient-details {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px var(--shadow);
+            overflow: hidden;
+            border-top: 4px solid var(--primary);
+        }
+        
+        .detail-section {
+            padding: 2rem;
+        }
+        
+        .detail-header {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+        }
+        
+        .detail-header svg {
+            margin-right: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 2rem;
+        }
+        
+        .detail-item {
+            margin-bottom: 1.5rem;
+        }
+        
+        .detail-label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .detail-value {
+            font-size: 1.1rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+        
+        .detail-value.empty {
+            color: var(--text-light);
+            font-style: italic;
+        }
+        
+        .alert-box {
+            background-color: #fff5f7;
+            border-left: 4px solid var(--danger);
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 4px;
+        }
+        
+        .alert-box h3 {
+            color: var(--danger);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .back-link svg {
+            margin-right: 6px;
+            transition: all 0.2s ease;
+        }
+        
+        .back-link:hover {
+            color: var(--primary);
+        }
+        
+        .back-link:hover svg {
+            transform: translateX(-3px);
+        }
+        
+        @media (max-width: 640px) {
+            .detail-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .header-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .footer {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <h1>Patient Details <span class="patient-id">ID: {{ patient.id }}</span></h1>
+            </div>
+            <div class="header-actions">
+                <a href="{% url 'update_patient' patient.id %}" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    Edit Patient
+                </a>
+            </div>
+        </div>
+        
+        <div class="patient-details">
+            <div class="detail-section">
+                <h2 class="detail-header">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                    </svg>
+                    Personal Information
+                </h2>
+                
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">Full Name</span>
+                        <div class="detail-value">{{ patient.name }}</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span class="detail-label">Age</span>
+                        <div class="detail-value">{{ patient.age }} years</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span class="detail-label">Gender</span>
+                        <div class="detail-value">{{ patient.gender|default:"Not specified" }}</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span class="detail-label">Phone Number</span>
+                        <div class="detail-value">{{ patient.phone_number }}</div>
+                    </div>
+                </div>
+                
+                <h2 class="detail-header" style="margin-top: 2rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                    </svg>
+                    Medical Information
+                </h2>
+                
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">Blood Group</span>
+                        <div class="detail-value {% if not patient.blood_group %}empty{% endif %}">
+                            {{ patient.blood_group|default:"Not recorded" }}
+                        </div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span class="detail-label">Allergies</span>
+                        <div class="detail-value {% if not patient.allergies %}empty{% endif %}">
+                            {{ patient.allergies|default:"None recorded" }}
+                        </div>
+                    </div>
+                </div>
+                
+                {% if patient.allergies %}
+                <div class="alert-box">
+                    <h3>Allergy Alert</h3>
+                    <p>This patient has reported allergies. Please ensure all medical staff are aware before treatment.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="footer">
+            <a href="{% url 'patient_management' %}" class="back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back to Patient List
+            </a>
+        </div>
+    </div>
+</body>
+</html>

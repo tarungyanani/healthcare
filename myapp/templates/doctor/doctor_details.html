@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Details</title>
+    <style>
+        :root {
+            --primary: #4f6df5;
+            --primary-light: #eef1ff;
+            --accent: #05d69e;
+            --text: #2d3748;
+            --text-light: #718096;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.05);
+            --border: #e2e8f0;
+            --error: #e53e3e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 3rem 2rem;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px var(--shadow);
+            padding: 2rem;
+            border-top: 4px solid var(--primary);
+        }
+        
+        .header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        h1 {
+            font-weight: 600;
+            font-size: 1.8rem;
+            color: var(--text);
+            position: relative;
+            padding-bottom: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        h1:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+        
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+        
+        .info-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .info-row {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            flex: 0 0 180px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .info-value {
+            color: var(--text-light);
+            flex: 1;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .back-link:before {
+            content: "← ";
+            transition: all 0.2s ease;
+        }
+        
+        .back-link:hover {
+            color: var(--primary);
+        }
+        
+        .back-link:hover:before {
+            margin-right: 5px;
+        }
+        
+        @media (max-width: 640px) {
+            .info-row {
+                flex-direction: column;
+            }
+            
+            .info-label {
+                margin-bottom: 0.25rem;
+            }
+            
+            body {
+                padding: 1.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Doctor Details</h1>
+            <p class="subtitle">Viewing complete information for the doctor</p>
+        </div>
+        
+        <div class="info-card">
+            <div class="info-row">
+                <div class="info-label">Name</div>
+                <div class="info-value">{{ doctor.name }}</div>
+            </div>
+            
+            <div class="info-row">
+                <div class="info-label">Gender</div>
+                <div class="info-value">{{ doctor.gender }}</div>
+            </div>
+            
+            <div class="info-row">
+                <div class="info-label">Phone Number</div>
+                <div class="info-value">{{ doctor.phone_number }}</div>
+            </div>
+            
+            <div class="info-row">
+                <div class="info-label">Specialization</div>
+                <div class="info-value">{{ doctor.specialization }}</div>
+            </div>
+            
+            <div class="info-row">
+                <div class="info-label">Consultation Fee</div>
+                <div class="info-value">{{ doctor.consultation_fee }}</div>
+            </div>
+        </div>
+        
+        <a href="{% url 'doctor_management' %}" class="back-link">Back to Doctor List</a>
+    </div>
+</body>
+</html>

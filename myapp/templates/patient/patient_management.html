@@ -1,0 +1,406 @@
+<!-- templates/patient_management.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Patients</title>
+    <style>
+        :root {
+            --primary: #4f6df5;
+            --primary-light: #eef1ff;
+            --accent: #05d69e;
+            --text: #2d3748;
+            --text-light: #718096;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.05);
+            --border: #e2e8f0;
+            --error: #e53e3e;
+            --danger: #f56565;
+            --danger-dark: #c53030;
+            --success: #48bb78;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 3rem 2rem;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .header-left h1 {
+            font-weight: 600;
+            font-size: 1.8rem;
+            color: var(--text);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .header-left h1:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+        
+        .subtitle {
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background: #3c5be0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11);
+        }
+        
+        .btn svg {
+            margin-right: 6px;
+            width: 18px;
+            height: 18px;
+        }
+        
+        .patient-list {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px var(--shadow);
+            overflow: hidden;
+            border-top: 4px solid var(--primary);
+        }
+        
+        .patient-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .patient-table th {
+            background: var(--primary-light);
+            text-align: left;
+            padding: 1rem;
+            font-weight: 600;
+            color: var(--text);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .patient-table td {
+            padding: 1rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .patient-table tr:hover {
+            background: var(--primary-light);
+        }
+        
+        .patient-name {
+            font-weight: 500;
+        }
+        
+        .patient-age {
+            color: var(--text-light);
+        }
+        
+        .action-cell {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+        
+        .action-btn {
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+        
+        .view-btn {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+        
+        .view-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .edit-btn {
+            background: #f0fff4;
+            color: var(--success);
+        }
+        
+        .edit-btn:hover {
+            background: var(--success);
+            color: white;
+        }
+        
+        .delete-btn {
+            background: #fff5f5;
+            color: var(--danger);
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        .delete-btn:hover {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .action-btn svg {
+            width: 14px;
+            height: 14px;
+            margin-right: 4px;
+        }
+        
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            text-align: center;
+        }
+        
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            color: var(--text-light);
+            opacity: 0.5;
+            margin-bottom: 1.5rem;
+        }
+        
+        .empty-state p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .footer {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .back-link svg {
+            margin-right: 6px;
+            transition: all 0.2s ease;
+        }
+        
+        .back-link:hover {
+            color: var(--primary);
+        }
+        
+        .back-link:hover svg {
+            transform: translateX(-3px);
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .action-cell {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .patient-table thead {
+                display: none;
+            }
+            
+            .patient-table, .patient-table tbody, .patient-table tr, .patient-table td {
+                display: block;
+                width: 100%;
+            }
+            
+            .patient-table tr {
+                margin-bottom: 1rem;
+                border-bottom: 1px solid var(--border);
+            }
+            
+            .patient-table td {
+                text-align: right;
+                padding: 0.75rem 1rem;
+                position: relative;
+                border: none;
+            }
+            
+            .patient-table td:before {
+                content: attr(data-label);
+                position: absolute;
+                left: 1rem;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                text-align: left;
+                font-weight: 600;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <h1>All Patients</h1>
+                <p class="subtitle">Manage your patient records</p>
+            </div>
+            <div class="header-actions">
+                <a href="{% url 'add_patient' %}" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                    Add New Patient
+                </a>
+                <a href="{% url 'index' %}" class="btn btn-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    Dashboard
+                </a>
+            </div>
+        </div>
+        
+        <div class="patient-list">
+            {% if patients %}
+                <table class="patient-table">
+                    <thead>
+                        <tr>
+                            <th>Patient Name</th>
+                            <th>Age</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for patient in patients %}
+                            <tr>
+                                <td data-label="Patient Name">
+                                    <span class="patient-name">{{ patient.name }}</span>
+                                </td>
+                                <td data-label="Age">
+                                    <span class="patient-age">{{ patient.age }} years</span>
+                                </td>
+                                <td data-label="Actions" class="action-cell">
+                                    <a href="{% url 'patient_detail' patient.id %}" class="action-btn view-btn">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                        View
+                                    </a>
+                                    <a href="{% url 'update_patient' patient.id %}" class="action-btn edit-btn">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                        Edit
+                                    </a>
+                                    <form action="{% url 'delete_patient' %}" method="post" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="id" value="{{ patient.id }}">
+                                        <button type="submit" class="action-btn delete-btn" onclick="return confirm('Are you sure you want to delete this patient?');">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="empty-state">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <p>No patients found in the system.</p>
+                    <a href="{% url 'add_patient' %}" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                        Add Your First Patient
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

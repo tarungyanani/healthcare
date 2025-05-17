@@ -1,0 +1,19 @@
+<!-- templates/delete_doctor.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete Doctor
+</title>
+</head>
+<body>
+    <h1>Delete Doctor
+</h1>
+    <p>Are you sure you want to delete <strong>{{ doctor.name }}</strong>?</p>
+    <form method="post" action="{% url 'delete_doctor' %}">
+        {% csrf_token %}
+        <input type="hidden" name="id" value="{{ doctor.id }}">
+        <button type="submit">Yes, Delete</button>
+        <a href="{% url 'doctor_management' %}">Cancel</a>
+    </form>
+</body>
+</html>

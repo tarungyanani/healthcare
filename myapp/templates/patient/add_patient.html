@@ -1,0 +1,226 @@
+<!-- templates/add_patient.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Patient</title>
+    <style>
+        :root {
+            --primary: #4f6df5;
+            --primary-light: #eef1ff;
+            --accent: #05d69e;
+            --text: #2d3748;
+            --text-light: #718096;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.05);
+            --border: #e2e8f0;
+            --error: #e53e3e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 3rem 2rem;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px var(--shadow);
+            padding: 2rem;
+            border-top: 4px solid var(--primary);
+        }
+        
+        .header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        h1 {
+            font-weight: 600;
+            font-size: 1.8rem;
+            color: var(--text);
+            position: relative;
+            padding-bottom: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        h1:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+        
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+        
+        input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+        
+        input[type="submit"] {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 1rem;
+        }
+        
+        input[type="submit"]:hover {
+            background: #3c5be0;
+            transform: translateY(-2px);
+        }
+        
+        input[type="submit"]:active {
+            transform: translateY(0);
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .back-link:before {
+            content: "← ";
+            transition: all 0.2s ease;
+        }
+        
+        .back-link:hover {
+            color: var(--primary);
+        }
+        
+        .back-link:hover:before {
+            margin-right: 5px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .required:after {
+            content: "*";
+            color: var(--error);
+            margin-left: 3px;
+        }
+        
+        @media (max-width: 640px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            body {
+                padding: 1.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Add New Patient</h1>
+            <p class="subtitle">Enter patient details to register in the system</p>
+        </div>
+        
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="required" for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required" for="age">Age</label>
+                    <input type="number" id="age" name="age" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="required" for="gender">Gender</label>
+                    <input type="text" id="gender" name="gender" placeholder="Male/Female/Other" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required" for="phone_number">Phone Number</label>
+                    <input type="tel" id="phone_number" name="phone_number" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="blood_group">Blood Group</label>
+                    <input type="text" id="blood_group" name="blood_group" placeholder="e.g., A+, B-, O+">
+                </div>
+                
+                <div class="form-group">
+                    <label for="allergies">Allergies</label>
+                    <input type="text" id="allergies" name="allergies" placeholder="e.g., Penicillin, Latex">
+                </div>
+            </div>
+            
+            <input type="submit" value="Add Patient">
+        </form>
+        
+        <a href="{% url 'patient_management' %}" class="back-link">Back to All Patients</a>
+    </div>
+</body>
+</html>
